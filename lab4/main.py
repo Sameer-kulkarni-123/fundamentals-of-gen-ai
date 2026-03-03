@@ -18,19 +18,24 @@ if st.button("Generate Trip Plan"):
         st.warning("Please enter a prompt")
     else:
         with st.spinner("Planning your trip..."):
-            response = agent.run(
-                f"""
-                Create a travel plan with:
-                1. Cultural & historical overview (1 paragraph)
-                2. Current weather and forecast
-                3. Travel dates (assume mid-month)
-                4. Flight options
-                5. Hotel options
-                6. Day-wise itinerary
+            response = agent.invoke({
+                "input": f"""
+            Plan a trip for the following request:
 
-                User request: {user_prompt}
-                """
-            )
+            {user_prompt}
+
+            Instructions:
+            - Use tools for weather, flights, and hotels when needed
+            - Provide a detailed itinerary
+            - Do NOT return JSON
+            - Respond in plain text
+            """
+            })
+
+
+
 
         st.subheader("✈️ Your Trip Plan")
-        st.write(response)
+        # st.write(response["output"])
+        st.markdown(response["output"])
+
